@@ -191,9 +191,9 @@ const FOOTNOTE_R = /^\[\^([^\]]+)](:.*)\n/
 const FOOTNOTE_REFERENCE_R = /^\[\^([^\]]+)]/
 const FORMFEED_R = /\f/g
 const GFM_TASK_R = /^\s*?\[(x|\s)\]/
-const HEADING_R = /^ *(#{1,6}) *([^\n]+?)(?: +#*)?(?:\n *)*(?:\n|$)/
+const HEADING_R = /^ *(#{1,6}) *([^\n]+?)(?: +#*)?(?: *{#([^\n]+)})?(?:\n *)*(?:\n|$)/
 const HEADING_ATX_COMPLIANT_R =
-  /^ *(#{1,6}) +([^\n]+?)(?: +#*)?(?:\n *)*(?:\n|$)/
+  /^ *(#{1,6}) +([^\n]+?)(?: +#*)?(?: *{#([^\n]+)})?(?:\n *)*(?:\n|$)/
 const HEADING_SETEXT_R = /^([^\n]+)\n *(=|-){3,} *(?:\n *)+\n/
 
 /**
@@ -1356,7 +1356,7 @@ export function compiler(
       parse(capture, parse, state) {
         return {
           children: parseInline(parse, capture[2], state),
-          id: options.slugify(capture[2]),
+          id: capture[3] ? capture[3] : options.slugify(capture[2]),
           level: capture[1].length as MarkdownToJSX.HeadingNode['level'],
         }
       },
